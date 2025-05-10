@@ -1,33 +1,42 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"github.com/FaizBastomi/AQI-cli-based/interactive"
+	"github.com/FaizBastomi/AQI-cli-based/utils"
+	"os"
+)
 
 func main() {
 	var opsi int
 
 	// Read data from JSON file
-	_, err := readFromJSON()
+	path, err := os.Getwd()
+	if err != nil {
+		fmt.Println("Error getting current directory:", err)
+		return
+	}
+	data, err := utils.ReadFromJSON(path + "/data.json")
 	if err != nil {
 		fmt.Println("Error reading data:", err)
 		return
 	}
 
-	mainMenu()
-	fmt.Print("Masukan opsi:")
-	fmt.Scanf("%d", &opsi)
+	interactive.ClearConsole()
 	for opsi != 5 {
+		interactive.MainMenu()
+		fmt.Print("Masukan opsi: ")
+		fmt.Scanln(&opsi)
 		switch opsi {
 		case 1:
-			break
+			interactive.TambahData(&data)
 		case 2:
-			break
 		case 3:
-			break
 		case 4:
-			break
+			interactive.ShowData(&data)
 		}
 	}
 
 	// Write data to JSON file
-	_ = writeToJSON(data)
+	_ = utils.WriteToJSON(data, path+"/data.json")
 }

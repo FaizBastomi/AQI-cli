@@ -1,6 +1,6 @@
-package main
+package utils
 
-func linearSearch(A []airPolution, aqiID string) int {
+func LinearSearch(A []AirPolution, aqiID string) int {
 	var i int
 	var idx int
 	idx = -1
@@ -15,7 +15,7 @@ func linearSearch(A []airPolution, aqiID string) int {
 	return idx
 }
 
-func binarySearch(A []airPolution, aqiID string) int {
+func BinarySearch(A []AirPolution, aqiID string) int {
 	var left, mid, right, idx int
 	idx = -1
 	left = 0
