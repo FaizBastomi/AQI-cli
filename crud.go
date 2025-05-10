@@ -46,6 +46,7 @@ func editData(lokasi, sumberPolusi string, idxPolusi int, aqiID string) {
 			data[i].Lokasi = lokasi
 			data[i].SumberPolusi = sumberPolusi
 			data[i].IdxPolusi = idxPolusi
+			data[i].Waktu = time.Now()
 		}
 	}
 }
