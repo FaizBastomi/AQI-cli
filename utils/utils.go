@@ -12,8 +12,14 @@ func ReadFromJSON(filename string) ([]AirPolution, error) {
 	if err != nil {
 		if os.IsNotExist(err) {
 			var emptyData = []AirPolution{}
-			initialData, _ := json.Marshal(emptyData)
-			_ = os.WriteFile(filename, initialData, 0644)
+			initialData, errM := json.Marshal(emptyData)
+			if errM != nil {
+				return nil, errM
+			}
+			err = os.WriteFile(filename, initialData, 0644)
+			if err != nil {
+				return nil, err
+			}
 			return emptyData, nil
 		}
 		return data, err
