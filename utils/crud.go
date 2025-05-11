@@ -1,11 +1,11 @@
-package main
+package utils
 
 import (
 	"fmt"
 	"time"
 )
 
-type airPolution struct {
+type AirPolution struct {
 	AqiID         string    `json:"aqiID"`
 	Lokasi        string    `json:"lokasi"`
 	SumberPolusi  string    `json:"sumberPolusi"`
@@ -14,9 +14,7 @@ type airPolution struct {
 	Waktu         time.Time `json:"waktu"`
 }
 
-var data []airPolution
-
-func addData(lokasi, sumberPolusi string, idxPolusi int) {
+func AddData(data *[]AirPolution, lokasi, sumberPolusi string, idxPolusi int) {
 	var tingkat string
 
 	if idxPolusi >= 0 && idxPolusi <= 50 {
@@ -29,17 +27,17 @@ func addData(lokasi, sumberPolusi string, idxPolusi int) {
 		tingkat = "Berbahaya"
 	}
 
-	data = append(data, airPolution{
-		AqiID:  fmt.Sprintf("AQI%d", len(data)+1),
+	*data = append(*data, AirPolution{
+		AqiID:  fmt.Sprintf("AQI%d", len(*data)+1),
 		Lokasi: lokasi, SumberPolusi: sumberPolusi, IdxPolusi: idxPolusi,
 		Waktu:         time.Now(),
 		TingkatBahaya: tingkat,
 	})
 }
 
-func editData(lokasi, sumberPolusi string, idxPolusi int, aqiID string) {
+func EditData(data []AirPolution, lokasi, sumberPolusi string, idxPolusi int, aqiID string) {
 	var i int
-	var user airPolution
+	var user AirPolution
 
 	for i, user = range data {
 		if user.AqiID == aqiID {
@@ -51,9 +49,9 @@ func editData(lokasi, sumberPolusi string, idxPolusi int, aqiID string) {
 	}
 }
 
-func deleteData(aqiID string) {
+func DeleteData(data []AirPolution, aqiID string) {
 	var i int
-	var user airPolution
+	var user AirPolution
 
 	for i, user = range data {
 		if user.AqiID == aqiID {

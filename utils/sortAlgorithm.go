@@ -1,8 +1,8 @@
-package main
+package utils
 
-func selectionSort(A *[]airPolution) {
+func SelectionSort(A *[]AirPolution) {
 	var i, j, minIdx int
-	var temp airPolution
+	var temp AirPolution
 
 	for i = 0; i < len(*A)-1; i++ {
 		minIdx = i
@@ -17,9 +17,9 @@ func selectionSort(A *[]airPolution) {
 	}
 }
 
-func insertionSort(A *[]airPolution) {
+func InsertionSort(A *[]AirPolution) {
 	var i, j int
-	var key airPolution
+	var key AirPolution
 
 	for i = 1; i < len(*A); i++ {
 		key = (*A)[i]
