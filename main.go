@@ -24,13 +24,14 @@ func main() {
 
 	interactive.ClearConsole()
 	for opsi != 5 {
-		interactive.MainMenu()
+		fmt.Println("Select Menu:\n1. Tambah Data\n2. Edit Data\n3. Hapus Data\n4. Tampilkan Data\n5. Exit")
 		fmt.Print("Masukan opsi: ")
 		fmt.Scanln(&opsi)
 		switch opsi {
 		case 1:
 			interactive.TambahData(&data)
 		case 2:
+			interactive.UbahDataMenu(&data)
 		case 3:
 		case 4:
 			interactive.ShowData(&data)
