@@ -10,18 +10,18 @@ type AirPolution struct {
 	Lokasi        string    `json:"lokasi"`
 	SumberPolusi  string    `json:"sumberPolusi"`
 	TingkatBahaya string    `json:"tingkatBahaya"`
-	IdxPolusi     int       `json:"idxPolusi"`
+	IdxUdara      int       `json:"IdxUdara"`
 	Waktu         time.Time `json:"waktu"`
 }
 
-func AddData(data *[]AirPolution, lokasi, sumberPolusi string, idxPolusi int) {
+func AddData(data *[]AirPolution, lokasi, sumberPolusi string, IdxUdara int) {
 	var tingkat string
 
-	if idxPolusi >= 0 && idxPolusi <= 50 {
+	if IdxUdara >= 0 && IdxUdara <= 50 {
 		tingkat = "Baik"
-	} else if idxPolusi >= 51 && idxPolusi <= 100 {
+	} else if IdxUdara >= 51 && IdxUdara <= 100 {
 		tingkat = "Sedang"
-	} else if idxPolusi >= 101 && idxPolusi <= 150 {
+	} else if IdxUdara >= 101 && IdxUdara <= 150 {
 		tingkat = "Tidak Sehat"
 	} else {
 		tingkat = "Berbahaya"
@@ -29,22 +29,33 @@ func AddData(data *[]AirPolution, lokasi, sumberPolusi string, idxPolusi int) {
 
 	*data = append(*data, AirPolution{
 		AqiID:  fmt.Sprintf("AQI%d", len(*data)+1),
-		Lokasi: lokasi, SumberPolusi: sumberPolusi, IdxPolusi: idxPolusi,
+		Lokasi: lokasi, SumberPolusi: sumberPolusi, IdxUdara: IdxUdara,
 		Waktu:         time.Now(),
 		TingkatBahaya: tingkat,
 	})
 }
 
-func EditData(data []AirPolution, lokasi, sumberPolusi string, idxPolusi int, aqiID string) {
+func EditData(data *[]AirPolution, lokasi, sumberPolusi string, IdxUdara int, aqiID string) {
 	var i int
 	var user AirPolution
 
-	for i, user = range data {
+	for i, user = range *data {
 		if user.AqiID == aqiID {
-			data[i].Lokasi = lokasi
-			data[i].SumberPolusi = sumberPolusi
-			data[i].IdxPolusi = idxPolusi
-			data[i].Waktu = time.Now()
+			(*data)[i].Lokasi = lokasi
+			(*data)[i].SumberPolusi = sumberPolusi
+			(*data)[i].IdxUdara = IdxUdara
+			(*data)[i].Waktu = time.Now()
+
+			if IdxUdara >= 0 && IdxUdara <= 50 {
+				(*data)[i].TingkatBahaya = "Baik"
+			} else if IdxUdara >= 51 && IdxUdara <= 100 {
+				(*data)[i].TingkatBahaya = "Sedang"
+			} else if IdxUdara >= 101 && IdxUdara <= 150 {
+				(*data)[i].TingkatBahaya = "Tidak Sehat"
+			} else {
+				(*data)[i].TingkatBahaya = "Berbahaya"
+			}
+			break
 		}
 	}
 }
