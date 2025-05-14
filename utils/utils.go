@@ -3,6 +3,8 @@ package utils
 import (
 	"encoding/json"
 	"os"
+	"sort"
+	"strings"
 )
 
 func ReadFromJSON(filename string) ([]AirPolution, error) {
@@ -56,4 +58,25 @@ func PaginateData(data []AirPolution, page int) []AirPolution {
 		end = len(data)
 	}
 	return data[start:end]
+}
+
+func SortDescendingByIdxUdara(A *[]AirPolution) {
+	sort.Slice(*A, func(i, j int) bool {
+		return (*A)[i].IdxUdara > (*A)[j].IdxUdara
+	})
+}
+
+func SortAscendingByIdxUdara(A *[]AirPolution) {
+	sort.Slice(*A, func(i, j int) bool {
+		return (*A)[i].IdxUdara < (*A)[j].IdxUdara
+	})
+}
+
+func SequentialSearch(data []AirPolution, target string) *AirPolution {
+	for _, item := range data {
+		if strings.EqualFold(item.Lokasi, target) {
+			return &item
+		}
+	}
+	return nil
 }

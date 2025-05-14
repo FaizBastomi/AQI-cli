@@ -3,12 +3,13 @@ package interactive
 import (
 	"bufio"
 	"fmt"
-	"github.com/FaizBastomi/AQI-cli-based/utils"
 	"os"
 	"os/exec"
 	"runtime"
 	"strconv"
 	"strings"
+
+	"github.com/FaizBastomi/AQI-cli-based/utils"
 )
 
 func ClearConsole() {
@@ -141,8 +142,6 @@ func UbahDataMenu(A *[]utils.AirPolution) {
 						}
 					}
 				}
-
-				// Update the data in the original slice
 				utils.EditData(A, item.Lokasi, item.SumberPolusi, item.IdxUdara, item.AqiID)
 			}
 		}
@@ -202,4 +201,34 @@ func ShowData(A *[]utils.AirPolution) {
 		}
 		ClearConsole()
 	}
+}
+
+func CariData(A *[]utils.AirPolution) {
+	var lokasi string
+	scanner := bufio.NewScanner(os.Stdin)
+	fmt.Print("Masukkan nama lokasi yang dicari: ")
+	scanner.Scan()
+	lokasi = scanner.Text()
+
+	result := utils.SequentialSearch(*A, lokasi)
+	if result != nil {
+		fmt.Println("Data ditemukan:")
+		fmt.Printf("Lokasi: %s\nSumber: %s\nIndex: %d\nTingkat: %s\nWaktu: %v\n",
+			result.Lokasi, result.SumberPolusi, result.IdxUdara, result.TingkatBahaya, result.Waktu.Format("02-January-2006 15:04"))
+	} else {
+		fmt.Println("Data tidak ditemukan.")
+	}
+	fmt.Println("Tekan Enter untuk kembali...")
+	scanner.Scan()
+	ClearConsole()
+}
+
+func UrutPolusiTerendah(A *[]utils.AirPolution) {
+	utils.SortAscendingByIdxUdara(A)
+	ShowData(A)
+}
+
+func UrutPolusiTertinggi(A *[]utils.AirPolution) {
+	utils.SortDescendingByIdxUdara(A)
+	ShowData(A)
 }
