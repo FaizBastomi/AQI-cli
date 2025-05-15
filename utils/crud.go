@@ -60,13 +60,13 @@ func EditData(data *[]AirPolution, lokasi, sumberPolusi string, IdxUdara int, aq
 	}
 }
 
-func DeleteData(data []AirPolution, aqiID string) {
+func DeleteData(data *[]AirPolution, aqiID string) {
 	var i int
 	var user AirPolution
 
-	for i, user = range data {
+	for i, user = range *data {
 		if user.AqiID == aqiID {
-			data = append(data[:i], data[i+1:]...)
+			*data = append((*data)[:i], (*data)[i+1:]...)
 		}
 	}
 }

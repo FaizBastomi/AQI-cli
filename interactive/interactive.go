@@ -27,47 +27,33 @@ func ClearConsole() {
 	}
 }
 
-func DataMenu() {
-	fmt.Println("Select Options:\n1. Cari Wilayah\n2. Urutkan Data")
-}
-
-func SearchMenu() {
-	fmt.Println("Search Options:\n1. Sequential Search\n2. Binary Search")
-}
-
-func SortMenu() {
-	fmt.Println("Sort Options:\n1. Selection Sort\n2. Insertion Sort")
-}
-
 func TambahData(A *[]utils.AirPolution) {
 	var lokasi, sumberPolusi string
 	var IdxUdara int
+	var scanner *bufio.Scanner
 
-	scanner := bufio.NewScanner(os.Stdin)
-	fmt.Print("Lokasi: ")
-	scanner.Scan()
-	lokasi = scanner.Text()
+	ClearConsole()
 
-	fmt.Print("Sumber Polusi: ")
-	scanner.Scan()
-	sumberPolusi = scanner.Text()
+	scanner = bufio.NewScanner(os.Stdin)
+	fmt.Println("Silahkan masukkan data baru")
 
-	fmt.Print("Index Udara: ")
-	fmt.Scanln(&IdxUdara)
+	lokasi = utils.GetNonEmptyInput(scanner, "Lokasi: ")
+	sumberPolusi = utils.GetNonEmptyInput(scanner, "Sumber Polusi: ")
+	IdxUdara = utils.GetIntInput(scanner, "Index Udara: ")
 
 	utils.AddData(A, lokasi, sumberPolusi, IdxUdara)
-	ClearConsole()
 }
 
-func UbahDataMenu(A *[]utils.AirPolution) {
+func UbahData(A *[]utils.AirPolution) {
 	var i, idxUdaraBaru int
 	var choice, lokasiBaru, sumberBaru string
 	var item utils.AirPolution
 	var dataPage []utils.AirPolution
+	var scanner *bufio.Scanner
 	var currentPage int = 1
 
 	ClearConsole()
-	scanner := bufio.NewScanner(os.Stdin)
+	scanner = bufio.NewScanner(os.Stdin)
 
 	fmt.Println("Silahkan pilih data yang ingin diubah:")
 	for {
@@ -145,11 +131,69 @@ func UbahDataMenu(A *[]utils.AirPolution) {
 				utils.EditData(A, item.Lokasi, item.SumberPolusi, item.IdxUdara, item.AqiID)
 			}
 		}
-		ClearConsole()
 	}
 }
 
-func HapusData(A *[]utils.AirPolution) {}
+func HapusData(A *[]utils.AirPolution) {
+	var i int
+	var choice, confirm string
+	var item utils.AirPolution
+	var dataPage []utils.AirPolution
+	var scanner *bufio.Scanner
+
+	var currentPage int = 1
+
+	ClearConsole()
+	scanner = bufio.NewScanner(os.Stdin)
+
+	fmt.Println("Silahkan pilih data yang ingin dihapus:")
+	for {
+		dataPage = utils.PaginateData(*A, currentPage)
+		if len(dataPage) == 0 {
+			fmt.Println("Tidak ada data untuk ditampilkan.")
+		} else {
+			fmt.Printf("Data halaman %d:\n", currentPage)
+			for i, item = range dataPage {
+				fmt.Printf("%d. Lokasi: %s\nSumber: %s\nIndex: %d\nTingkat: %s\nWaktu: %v\n",
+					i+1, item.Lokasi, item.SumberPolusi, item.IdxUdara, item.TingkatBahaya, item.Waktu.Format("02-January-2006 15:04"))
+				fmt.Println(strings.Repeat("-", 50))
+			}
+		}
+		fmt.Println("[n] Next page\n[p] Previous page\n[q] Main Menu, atau masukan nomor data")
+		fmt.Print("Select: ")
+
+		scanner.Scan()
+		choice = scanner.Text()
+		if choice == "q" {
+			ClearConsole()
+			return
+		} else if choice == "n" {
+			currentPage++
+		} else if choice == "p" {
+			if currentPage > 1 {
+				currentPage--
+			} else {
+				fmt.Println("Sudah di halaman pertama.")
+			}
+		} else {
+			index, err := strconv.Atoi(choice)
+			if err != nil || index < 1 || index > len(dataPage) {
+				fmt.Println("Pilihan tidak valid.")
+			} else {
+				ClearConsole()
+				item = dataPage[index-1]
+
+				fmt.Print("Apakah kamu yakin (y/n): ")
+				scanner.Scan()
+				confirm = scanner.Text()
+
+				if confirm == "y" {
+					utils.DeleteData(A, item.AqiID)
+				}
+			}
+		}
+	}
+}
 
 func ShowData(A *[]utils.AirPolution) {
 	var currentPage, totalPages int
@@ -199,16 +243,15 @@ func ShowData(A *[]utils.AirPolution) {
 				currentPage = page
 			}
 		}
-		ClearConsole()
 	}
 }
 
 func CariData(A *[]utils.AirPolution) {
 	var lokasi string
-	scanner := bufio.NewScanner(os.Stdin)
-	fmt.Print("Masukkan nama lokasi yang dicari: ")
-	scanner.Scan()
-	lokasi = scanner.Text()
+	var scanner *bufio.Scanner
+
+	scanner = bufio.NewScanner(os.Stdin)
+	lokasi = utils.GetNonEmptyInput(scanner, "Masukkan nama lokasi yang dicari: ")
 
 	result := utils.SequentialSearch(*A, lokasi)
 	if result != nil {
@@ -220,7 +263,6 @@ func CariData(A *[]utils.AirPolution) {
 	}
 	fmt.Println("Tekan Enter untuk kembali...")
 	scanner.Scan()
-	ClearConsole()
 }
 
 func UrutPolusiTerendah(A *[]utils.AirPolution) {

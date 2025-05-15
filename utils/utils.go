@@ -1,9 +1,12 @@
 package utils
 
 import (
+	"bufio"
 	"encoding/json"
+	"fmt"
 	"os"
 	"sort"
+	"strconv"
 	"strings"
 )
 
@@ -58,6 +61,35 @@ func PaginateData(data []AirPolution, page int) []AirPolution {
 		end = len(data)
 	}
 	return data[start:end]
+}
+
+func GetNonEmptyInput(scanner *bufio.Scanner, prompt string) string {
+	var input string
+	for {
+		fmt.Print(prompt)
+		scanner.Scan()
+		input = scanner.Text()
+		if strings.TrimSpace(input) != "" {
+			break
+		}
+		fmt.Println("Data tidak boleh kosong.")
+	}
+	return input
+}
+
+func GetIntInput(scanner *bufio.Scanner, prompt string) int {
+	var input int
+	for {
+		fmt.Print(prompt)
+		scanner.Scan()
+		inputStr := scanner.Text()
+		if strings.TrimSpace(inputStr) != "" {
+			input, _ = strconv.Atoi(inputStr)
+			break
+		}
+		fmt.Println("Data tidak boleh kosong.")
+	}
+	return input
 }
 
 func SortDescendingByIdxUdara(A *[]AirPolution) {
