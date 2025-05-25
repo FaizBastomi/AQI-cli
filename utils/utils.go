@@ -2,67 +2,12 @@ package utils
 
 import (
 	"bufio"
-	"encoding/json"
 	"fmt"
 	"math/rand"
-	"os"
-	"sort"
 	"strconv"
 	"strings"
 	"time"
 )
-
-func ReadFromJSON(filename string) (AirPolutions, error) {
-	var data AirPolutions
-	var dataByte []byte
-	var err error
-
-	// Empty data to return if file does not exist
-	var emptyData AirPolutions
-
-	dataByte, err = os.ReadFile(filename)
-	if err != nil {
-		if os.IsNotExist(err) {
-			initialData, errM := json.Marshal(emptyData)
-			if errM != nil {
-				return emptyData, errM
-			}
-			err = os.WriteFile(filename, initialData, 0644)
-			if err != nil {
-				return emptyData, err
-			}
-			return emptyData, nil
-		}
-		return data, err
-	}
-
-	err = json.Unmarshal(dataByte, &data)
-	if err != nil {
-		return emptyData, err
-	}
-
-	return data, nil
-}
-
-func WriteToJSON(data AirPolutions, filename string) error {
-	var dataByte []byte
-	var err error
-	var nonEmptyData []AirPolution
-
-	nonEmptyData = filterNonEmpty(data)
-
-	dataByte, err = json.Marshal(nonEmptyData)
-	if err != nil {
-		return err
-	}
-
-	err = os.WriteFile(filename, dataByte, 0644)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
 
 func filterNonEmpty(data AirPolutions) []AirPolution {
 	var entry AirPolution
@@ -143,18 +88,6 @@ func randomID(length int) string {
 		result[i] = charset[seededRand.Intn(len(charset))]
 	}
 	return string(result)
-}
-
-func SortDescendingByIdxUdara(A *AirPolutions) {
-	sort.Slice(*A, func(i, j int) bool {
-		return (*A)[i].IdxUdara > (*A)[j].IdxUdara
-	})
-}
-
-func SortAscendingByIdxUdara(A *AirPolutions) {
-	sort.Slice(*A, func(i, j int) bool {
-		return (*A)[i].IdxUdara < (*A)[j].IdxUdara
-	})
 }
 
 func SequentialSearch(data AirPolutions, target string) *AirPolution {

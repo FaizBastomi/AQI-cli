@@ -11,7 +11,7 @@ type AirPolution struct {
 	Lokasi        string    `json:"lokasi"`
 	SumberPolusi  string    `json:"sumberPolusi"`
 	TingkatBahaya string    `json:"tingkatBahaya"`
-	IdxUdara      int       `json:"IdxUdara"`
+	IdxUdara      int       `json:"idxUdara"`
 	Waktu         time.Time `json:"waktu"`
 }
 
