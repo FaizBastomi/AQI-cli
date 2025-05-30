@@ -9,27 +9,6 @@ import (
 	"github.com/FaizBastomi/AQI-cli-based/utils"
 )
 
-type SortType int
-
-const (
-	IDXSELDESC SortType = iota
-	TIMESELDESC
-	IDXINSDESC
-	TIMEINSDESC
-)
-
-var sortMethods = struct {
-	IdxSelDesc  SortType
-	TimeSelDesc SortType
-	IdxInsDesc  SortType
-	TimeInsDesc SortType
-}{
-	IdxSelDesc:  IDXSELDESC,
-	TimeSelDesc: TIMESELDESC,
-	IdxInsDesc:  IDXINSDESC,
-	TimeInsDesc: TIMEINSDESC,
-}
-
 func subUbahData(A *utils.AirPolutions, B utils.AirPolution) {
 	var idxUdaraBaru int
 	var lokasiBaru, sumberBaru, choice string
@@ -79,15 +58,11 @@ func subUbahData(A *utils.AirPolutions, B utils.AirPolution) {
 	ClearConsole()
 }
 
-func subUrutData(A *utils.AirPolutions, sortType SortType) {
+func subUrutData(A *utils.AirPolutions, sortType int) {
 	switch sortType {
 	case 0:
 		utils.SelSortDescByIdxUdara(A)
 	case 1:
-		utils.SelSortDescByTime(A)
-	case 2:
-		utils.InsSortDescByIdxUdara(A)
-	case 3:
 		utils.InsSortDescByTime(A)
 	}
 	ClearConsole()

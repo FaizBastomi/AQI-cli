@@ -44,24 +44,56 @@ func TambahData(A *utils.AirPolutions) {
 	utils.AddData(A, lokasi, sumberPolusi, IdxUdara)
 }
 
-// TODO: Implementasikan algoritma pencarian di searchAlgorithm.go
 func CariData(A *utils.AirPolutions) {
-	var lokasi string
+	var keyword string
+	var result, filteredData []utils.AirPolution
 	var scanner *bufio.Scanner
+	var err error
 
 	scanner = bufio.NewScanner(os.Stdin)
-	lokasi = utils.GetNonEmptyInput(scanner, "Masukkan nama lokasi yang dicari: ")
+	keyword = utils.GetNonEmptyInput(scanner, "Masukkan nama lokasi yang dicari: ")
 
-	result := utils.SequentialSearch(*A, lokasi)
-	if result != nil {
-		fmt.Println("Data ditemukan:")
-		fmt.Printf("Lokasi: %s\nSumber: %s\nIndex: %d\nTingkat: %s\nWaktu: %v\n",
-			result.Lokasi, result.SumberPolusi, result.IdxUdara, result.TingkatBahaya, result.Waktu.Format("02-January-2006 15:04"))
+	filteredData = utils.FilterNonEmpty(*A)
+
+	if len(filteredData) < 25 {
+		result, err = utils.LinearSearch(filteredData, keyword)
+		if err != nil {
+			fmt.Println("Data tidak ditemukan.")
+			fmt.Print("Tekan Enter untuk melanjutkan...")
+			scanner.Scan()
+		} else {
+			ClearConsole()
+			fmt.Printf("Hasil pencarian:")
+			for i, item := range result {
+				if item.Lokasi != "" {
+					fmt.Printf("%d. Lokasi: %s\nSumber: %s\nIndex: %d\nTingkat: %s\nWaktu: %v\n",
+						i+1, item.Lokasi, item.SumberPolusi, item.IdxUdara, item.TingkatBahaya, item.Waktu.Format("02-January-2006 15:04"))
+					fmt.Println(strings.Repeat("-", 50))
+				}
+			}
+			fmt.Print("Tekan Enter untuk melanjutkan...")
+			scanner.Scan()
+		}
 	} else {
-		fmt.Println("Data tidak ditemukan.")
+		result, err = utils.BinarySearch(filteredData, keyword)
+		if err != nil {
+			fmt.Println("Data tidak ditemukan.")
+			fmt.Print("Tekan Enter untuk melanjutkan...")
+			scanner.Scan()
+		} else {
+			ClearConsole()
+			fmt.Println("Hasil pencarian:")
+			for i, item := range result {
+				if item.Lokasi != "" {
+					fmt.Printf("%d. Lokasi: %s\nSumber: %s\nIndex: %d\nTingkat: %s\nWaktu: %v\n",
+						i+1, item.Lokasi, item.SumberPolusi, item.IdxUdara, item.TingkatBahaya, item.Waktu.Format("02-January-2006 15:04"))
+					fmt.Println(strings.Repeat("-", 50))
+				}
+			}
+			fmt.Print("Tekan Enter untuk melanjutkan...")
+			scanner.Scan()
+		}
 	}
-	fmt.Println("Tekan Enter untuk kembali...")
-	scanner.Scan()
 }
 
 func UbahData(A *utils.AirPolutions) {
@@ -279,7 +311,7 @@ func UrutData(A *utils.AirPolutions) {
 	scanner = bufio.NewScanner(os.Stdin)
 
 	fmt.Println("Pilih metode pengurutan:")
-	fmt.Println("1. indeks udara tertinggi (Selection)\n2. berdasarkan waktu terbaru (Selection)\n3. indeks udara tertinggi (Insertion)\n4. berdasarkan waktu terbaru (Insertion)")
+	fmt.Println("1. indeks udara tertinggi (Selection)\n2. berdasarkan waktu terbaru (Insertion)")
 	fmt.Print("Masukkan pilihan (1/2/3/4): ")
 
 	scanner.Scan()
@@ -287,12 +319,8 @@ func UrutData(A *utils.AirPolutions) {
 
 	switch choice {
 	case "1":
-		subUrutData(A, sortMethods.IdxSelDesc)
+		subUrutData(A, 0)
 	case "2":
-		subUrutData(A, sortMethods.TimeSelDesc)
-	case "3":
-		subUrutData(A, sortMethods.IdxInsDesc)
-	case "4":
-		subUrutData(A, sortMethods.TimeInsDesc)
+		subUrutData(A, 1)
 	}
 }

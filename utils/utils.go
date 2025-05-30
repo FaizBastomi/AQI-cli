@@ -3,10 +3,8 @@ package utils
 import (
 	"bufio"
 	"fmt"
-	"math/rand"
 	"strconv"
 	"strings"
-	"time"
 )
 
 func FilterNonEmpty(data AirPolutions) []AirPolution {
@@ -74,26 +72,4 @@ func GetIntInput(scanner *bufio.Scanner, prompt string) int {
 		}
 	}
 	return input
-}
-
-func randomID(length int) string {
-	var i int
-
-	var charset = "abcdefghijklmnopqrstuvwxyz"
-	var seededRand = rand.New(rand.NewSource(time.Now().UnixNano()))
-	var result = make([]byte, length)
-
-	for i = range result {
-		result[i] = charset[seededRand.Intn(len(charset))]
-	}
-	return string(result)
-}
-
-func SequentialSearch(data AirPolutions, target string) *AirPolution {
-	for _, item := range data {
-		if strings.EqualFold(item.Lokasi, target) {
-			return &item
-		}
-	}
-	return nil
 }

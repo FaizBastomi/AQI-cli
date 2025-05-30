@@ -1,37 +1,50 @@
 package utils
 
-func LinearSearch(A []AirPolution, aqiID string) int {
+import (
+	"errors"
+	"strings"
+)
+
+func LinearSearch(A []AirPolution, keyword string) ([]AirPolution, error) {
 	var i int
-	var idx int
-	idx = -1
+	var data []AirPolution
 
 	for i = 0; i < len(A); i++ {
-		if A[i].AqiID == aqiID {
-			idx = i
-			break
+		if strings.Contains(strings.ToLower(A[i].Lokasi), strings.ToLower(keyword)) {
+			data = append(data, A[i])
 		}
 	}
 
-	return idx
+	if len(data) == 0 {
+		return []AirPolution{}, errors.New("no data found")
+	}
+
+	return data, nil
 }
 
-func BinarySearch(A []AirPolution, aqiID string) int {
-	var left, mid, right, idx int
-	idx = -1
+func BinarySearch(A []AirPolution, keyword string) ([]AirPolution, error) {
+	var left, mid, right int
+	var data []AirPolution
 	left = 0
 	right = len(A) - 1
 
-	for left <= right && idx == -1 {
+	InsSortAscByLokasi(&A)
+	for left <= right {
 		mid = (left + right) / 2
 
-		if A[mid].AqiID == aqiID {
-			idx = mid
-		} else if A[mid].AqiID < aqiID {
+		if strings.ToLower(A[mid].Lokasi) == strings.ToLower(keyword) {
+			data = append(data, A[mid])
+			break
+		} else if strings.ToLower(A[mid].Lokasi) < strings.ToLower(keyword) {
 			left = mid + 1
-		} else if A[mid].AqiID > aqiID {
+		} else if strings.ToLower(A[mid].Lokasi) > strings.ToLower(keyword) {
 			right = mid - 1
 		}
 	}
 
-	return idx
+	if len(data) == 0 {
+		return []AirPolution{}, errors.New("data not found")
+	}
+
+	return data, nil
 }

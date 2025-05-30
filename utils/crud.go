@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"fmt"
 	"time"
 )
 
@@ -34,7 +35,7 @@ func AddData(data *AirPolutions, lokasi, sumberPolusi string, IdxUdara int) {
 		tingkat = "Berbahaya"
 	}
 
-	data[lastIdx].AqiID = randomID(5)
+	data[lastIdx].AqiID = fmt.Sprintf("%03d", lastIdx+1)
 	data[lastIdx].Lokasi = lokasi
 	data[lastIdx].SumberPolusi = sumberPolusi
 	data[lastIdx].IdxUdara = IdxUdara
