@@ -42,7 +42,7 @@ func WriteToJSON(data AirPolutions, filename string) error {
 	var err error
 	var nonEmptyData []AirPolution
 
-	nonEmptyData = filterNonEmpty(data)
+	nonEmptyData = FilterNonEmpty(data)
 
 	dataByte, err = json.Marshal(nonEmptyData)
 	if err != nil {
