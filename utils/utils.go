@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-func filterNonEmpty(data AirPolutions) []AirPolution {
+func FilterNonEmpty(data AirPolutions) []AirPolution {
 	var entry AirPolution
 	var n int = 0
 
@@ -23,22 +23,21 @@ func filterNonEmpty(data AirPolutions) []AirPolution {
 	return data[:n]
 }
 
-func PaginateData(data AirPolutions, page int) []AirPolution {
+func PaginateData(data []AirPolution, page int) []AirPolution {
 	var perPage, start, end int
-	var filteredData []AirPolution
 
 	perPage = 5
 	start = (page - 1) * perPage
-	filteredData = filterNonEmpty(data)
 
-	if start >= len(filteredData) {
+	if start >= len(data) {
 		return []AirPolution{}
 	}
 	end = start + perPage
-	if end > len(filteredData) {
-		end = len(filteredData)
+	if end > len(data) {
+		end = len(data)
 	}
-	return filteredData[start:end]
+
+	return data[start:end]
 }
 
 func GetNonEmptyInput(scanner *bufio.Scanner, prompt string) string {

@@ -68,7 +68,7 @@ func UbahData(A *utils.AirPolutions) {
 	var i, index, totalPages int
 	var choice string
 	var item utils.AirPolution
-	var dataPage []utils.AirPolution
+	var dataPage, filteredData []utils.AirPolution
 	var scanner *bufio.Scanner
 	var err error
 
@@ -79,11 +79,12 @@ func UbahData(A *utils.AirPolutions) {
 
 	fmt.Println("Silahkan pilih data yang ingin diubah:")
 	for {
-		dataPage = utils.PaginateData(*A, currentPage)
-		totalPages = len(dataPage) / 5
-		if len(dataPage)%5 != 0 {
+		filteredData = utils.FilterNonEmpty(*A)
+		totalPages = len(filteredData) / 5
+		if len(filteredData)%5 != 0 {
 			totalPages++
 		}
+		dataPage = utils.PaginateData(filteredData, currentPage)
 
 		if len(dataPage) == 0 {
 			fmt.Println("Tidak ada data untuk ditampilkan.")
@@ -134,7 +135,7 @@ func HapusData(A *utils.AirPolutions) {
 	var i, index, totalPages int
 	var choice, confirm string
 	var item utils.AirPolution
-	var dataPage []utils.AirPolution
+	var dataPage, filteredData []utils.AirPolution
 	var scanner *bufio.Scanner
 	var err error
 
@@ -146,11 +147,12 @@ func HapusData(A *utils.AirPolutions) {
 	for {
 		fmt.Println("Silahkan pilih data yang ingin dihapus:")
 
-		dataPage = utils.PaginateData(*A, currentPage)
-		totalPages = len(dataPage) / 5
-		if len(dataPage)%5 != 0 {
+		filteredData = utils.FilterNonEmpty(*A)
+		totalPages = len(filteredData) / 5
+		if len(filteredData)%5 != 0 {
 			totalPages++
 		}
+		dataPage = utils.PaginateData(filteredData, currentPage)
 
 		if len(dataPage) == 0 {
 			fmt.Println("Tidak ada data untuk ditampilkan.")
@@ -207,7 +209,7 @@ func HapusData(A *utils.AirPolutions) {
 func ShowData(A *utils.AirPolutions) {
 	var currentPage, totalPages, page, i int
 	var item utils.AirPolution
-	var dataPage []utils.AirPolution
+	var dataPage, filteredData []utils.AirPolution
 	var scanner *bufio.Scanner
 	var choice string
 	var err error
@@ -217,11 +219,12 @@ func ShowData(A *utils.AirPolutions) {
 	currentPage = 1
 
 	for {
-		dataPage = utils.PaginateData(*A, currentPage)
-		totalPages = len(dataPage) / 5
-		if len(dataPage)%5 != 0 {
+		filteredData = utils.FilterNonEmpty(*A)
+		totalPages = len(filteredData) / 5
+		if len(filteredData)%5 != 0 {
 			totalPages++
 		}
+		dataPage = utils.PaginateData(filteredData, currentPage)
 
 		if len(dataPage) == 0 {
 			fmt.Println("Tidak ada data untuk ditampilkan.")
@@ -234,8 +237,7 @@ func ShowData(A *utils.AirPolutions) {
 			}
 		}
 
-		fmt.Println("[u] Urutkan data berdasarkan ?\n[s] Cari data\n[w] Periodik data")
-		fmt.Println("[n] Halaman berikutnya\n[p] Halaman sebelumnya\n[q] Main Menu, atau masukan nomor halaman")
+		fmt.Println("[u] Urutkan data berdasarkan ?\n[n] Halaman berikutnya\n[p] Halaman sebelumnya\n[q] Main Menu, atau masukan nomor halaman")
 		fmt.Print("Select: ")
 		scanner.Scan()
 		choice = scanner.Text()
@@ -244,8 +246,6 @@ func ShowData(A *utils.AirPolutions) {
 		switch choice {
 		case "u":
 			UrutData(A)
-		case "s":
-		case "w":
 		case "q":
 			return
 		case "n":
