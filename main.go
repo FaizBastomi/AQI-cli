@@ -3,9 +3,16 @@ package main
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/FaizBastomi/AQI-cli-based/interactive"
 	"github.com/FaizBastomi/AQI-cli-based/utils"
+)
+
+const (
+	Green  = "\033[32m"
+	Yellow = "\033[33m"
+	Reset  = "\033[0m"
 )
 
 func main() {
@@ -24,8 +31,13 @@ func main() {
 	}
 
 	interactive.ClearConsole()
+	fmt.Printf("%s%s\n", Green, strings.Repeat("-", 50))
+	fmt.Printf("%17sSelamat datang di Aplikasi\n", Yellow)
+	fmt.Printf(" %8sPengelolaan Data Kualitas Udara\n", " ")
+	fmt.Printf("%s%s%s\n\n", Green, strings.Repeat("-", 50), Reset)
+
 	for opsi != 7 {
-		fmt.Println("Select Menu:")
+		fmt.Println("Pilih Menu:")
 		fmt.Println("1. Tambah Data")
 		fmt.Println("2. Edit Data")
 		fmt.Println("3. Hapus Data")
