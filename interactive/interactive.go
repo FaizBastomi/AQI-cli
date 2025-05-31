@@ -324,3 +324,28 @@ func UrutData(A *utils.AirPolutions) {
 		subUrutData(A, 1)
 	}
 }
+
+func PeriodikData(A *utils.AirPolutions) {
+	var choice string
+	var scanner *bufio.Scanner
+
+	scanner = bufio.NewScanner(os.Stdin)
+
+	fmt.Println("Pilih periode data:")
+	fmt.Println("1. Per 3 hari\n2. Per minggu\n3. Per bulan")
+	fmt.Print("Masukkan pilihan (1/2/3): ")
+
+	scanner.Scan()
+	choice = scanner.Text()
+
+	switch choice {
+	case "1":
+		subPeriodikData(A, "day")
+	case "2":
+		subPeriodikData(A, "week")
+	case "3":
+		subPeriodikData(A, "month")
+	default:
+		fmt.Println("Pilihan tidak valid.")
+	}
+}

@@ -24,14 +24,15 @@ func main() {
 	}
 
 	interactive.ClearConsole()
-	for opsi != 6 {
+	for opsi != 7 {
 		fmt.Println("Select Menu:")
 		fmt.Println("1. Tambah Data")
 		fmt.Println("2. Edit Data")
 		fmt.Println("3. Hapus Data")
 		fmt.Println("4. Tampilkan Data")
 		fmt.Println("5. Cari Data")
-		fmt.Println("6. Exit")
+		fmt.Println("6. Histori Data")
+		fmt.Println("7. Exit")
 		fmt.Print("Masukan opsi: ")
 		fmt.Scanln(&opsi)
 
@@ -46,6 +47,8 @@ func main() {
 			interactive.ShowData(&data)
 		case 5:
 			interactive.CariData(&data)
+		case 6:
+			interactive.PeriodikData(&data)
 		}
 
 		interactive.ClearConsole()

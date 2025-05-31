@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"strings"
 
 	"github.com/FaizBastomi/AQI-cli-based/utils"
 )
@@ -66,4 +67,72 @@ func subUrutData(A *utils.AirPolutions, sortType int) {
 		utils.InsSortDescByTime(A)
 	}
 	ClearConsole()
+}
+
+func subPeriodikData(A *utils.AirPolutions, time string) {
+	var currentPage, totalPages, page, i int
+	var item utils.AirPolution
+	var dataPage, filteredData, periodicFiltered []utils.AirPolution
+	var scanner *bufio.Scanner
+	var choice string
+	var err error
+
+	ClearConsole()
+	scanner = bufio.NewScanner(os.Stdin)
+	currentPage = 1
+
+	// Sort based on Air Quality
+	utils.SelSortDescByIdxUdara(A)
+
+	for {
+		filteredData = utils.FilterNonEmpty(*A)
+		periodicFiltered = utils.PeriodicFilter(filteredData, time)
+		totalPages = len(periodicFiltered) / 5
+		if len(periodicFiltered)%5 != 0 {
+			totalPages++
+		}
+		dataPage = utils.PaginateData(periodicFiltered, currentPage)
+
+		if len(dataPage) == 0 {
+			fmt.Println("Tidak ada data untuk ditampilkan.")
+		} else {
+
+			fmt.Printf("Data halaman %d dari %d:\n", currentPage, totalPages)
+			for i, item = range dataPage {
+				fmt.Printf("%d Lokasi: %s\nSumber: %s\nIndex: %d\nTingkat: %s\nWaktu: %v\n",
+					i+1, item.Lokasi, item.SumberPolusi, item.IdxUdara, item.TingkatBahaya, item.Waktu.Format("02-January-2006 15:04"))
+				fmt.Println(strings.Repeat("-", 50))
+			}
+		}
+
+		fmt.Println("[n] Halaman berikutnya\n[p] Halaman sebelumnya\n[q] Main Menu, atau masukan nomor halaman")
+		fmt.Print("Pilih: ")
+		scanner.Scan()
+		choice = scanner.Text()
+
+		ClearConsole()
+		switch choice {
+		case "q":
+			return
+		case "n":
+			if currentPage < totalPages {
+				currentPage++
+			} else {
+				fmt.Println("Sudah di halaman terakhir.")
+			}
+		case "p":
+			if currentPage > 1 {
+				currentPage--
+			} else {
+				fmt.Println("Sudah di halaman pertama.")
+			}
+		default:
+			page, err = strconv.Atoi(choice)
+			if err != nil || page < 1 {
+				fmt.Println("Halaman tidak valid.")
+			} else {
+				currentPage = page
+			}
+		}
+	}
 }

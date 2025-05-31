@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+	"time"
 )
 
 func FilterNonEmpty(data AirPolutions) []AirPolution {
@@ -72,4 +73,33 @@ func GetIntInput(scanner *bufio.Scanner, prompt string) int {
 		}
 	}
 	return input
+}
+
+func PeriodicFilter(data []AirPolution, period string) []AirPolution {
+	var duration time.Duration
+	var now, threshold time.Time
+	var entry AirPolution
+
+	now = time.Now()
+	switch period {
+	case "day":
+		duration = 3 * 24 * time.Hour
+	case "week":
+		duration = 7 * 24 * time.Hour
+	case "month":
+		duration = 30 * 24 * time.Hour
+	default:
+		fmt.Println("Invalid period")
+		return nil
+	}
+
+	threshold = now.Add(-duration)
+	var result []AirPolution
+	for _, entry = range data {
+		// Assuming entry.Waktu is of type time.Time
+		if entry.Waktu.After(threshold) {
+			result = append(result, entry)
+		}
+	}
+	return result
 }
