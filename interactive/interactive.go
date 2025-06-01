@@ -63,7 +63,7 @@ func CariData(A *utils.AirPolutions) {
 			scanner.Scan()
 		} else {
 			ClearConsole()
-			fmt.Printf("Hasil pencarian:")
+			fmt.Println("Hasil pencarian:")
 			for i, item := range result {
 				if item.Lokasi != "" {
 					fmt.Printf("%d. Lokasi: %s\nSumber: %s\nIndex: %d\nTingkat: %s\nWaktu: %v\n",
@@ -312,7 +312,7 @@ func UrutData(A *utils.AirPolutions) {
 
 	fmt.Println("Pilih metode pengurutan:")
 	fmt.Println("1. indeks udara tertinggi (Selection)\n2. berdasarkan waktu terbaru (Insertion)")
-	fmt.Print("Masukkan pilihan (1/2/3/4): ")
+	fmt.Print("Masukkan pilihan (1/2): ")
 
 	scanner.Scan()
 	choice = scanner.Text()

@@ -15,6 +15,12 @@ const (
 	Reset  = "\033[0m"
 )
 
+func exitText() {
+	fmt.Printf("%s%s\n", Green, strings.Repeat("-", 50))
+	fmt.Printf("%8sTerima kasih telah menggunakan aplikasi ini!\n", Yellow)
+	fmt.Printf("%s%s%s\n", Green, strings.Repeat("-", 50), Reset)
+}
+
 func main() {
 	var opsi int
 
@@ -33,7 +39,7 @@ func main() {
 	interactive.ClearConsole()
 	fmt.Printf("%s%s\n", Green, strings.Repeat("-", 50))
 	fmt.Printf("%17sSelamat datang di Aplikasi\n", Yellow)
-	fmt.Printf(" %8sPengelolaan Data Kualitas Udara\n", " ")
+	fmt.Printf("%9sPengelolaan Data Kualitas Udara\n", " ")
 	fmt.Printf("%s%s%s\n\n", Green, strings.Repeat("-", 50), Reset)
 
 	for opsi != 7 {
@@ -66,6 +72,7 @@ func main() {
 		interactive.ClearConsole()
 	}
 
+	exitText()
 	// Write data to JSON file
 	_ = utils.WriteToJSON(data, path+"/data.json")
 }
