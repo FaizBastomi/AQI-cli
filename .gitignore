@@ -1,5 +1,5 @@
 # JetBrains IDE configuration files
 .idea
 
-# The Data
-data.json
+# Data files
+*.json
